@@ -41,6 +41,15 @@ class ProjectsListByAdminAdviceView(ListAPIView):
         return queryset
 
 
+class ProjectListForUserTablesView(ListAPIView):
+    serializer_class = ProjectListForTablesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        project_ids = list(self.request.query_params.values())
+        return Project.objects.filter(projectStatus=True, id__in=project_ids)
+
+
 class ProjectDetailView(RetrieveAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -61,7 +70,12 @@ class ProjectFollowerUpdateView(UpdateAPIView):
     def perform_update(self, serializer):
         user = self.request.user
         project = self.get_object()
-        project.participantList.add(user)
+
+        if project.participantList.filter(id=user.id).exists():
+            project.participantList.remove(user)
+        else:
+            project.participantList.add(user)
+
         serializer.save(followerList=project.participantList.all())
 
 # class IsProjectOwnerOrAdmin(BasePermission):

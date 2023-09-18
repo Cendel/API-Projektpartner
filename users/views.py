@@ -1,3 +1,4 @@
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, ListAPIView, \
     RetrieveUpdateDestroyAPIView
 from rest_framework import status
@@ -34,7 +35,8 @@ class LoginView(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            raise AuthenticationFailed('Geçersiz e-posta veya şifre.')
         user = serializer.validated_data['user']
         access_token = str(AccessToken.for_user(user))
 

@@ -19,6 +19,13 @@ class ProjectFollowerUpdateSerializer(serializers.ModelSerializer):
         model = Project
         fields = ['followerList']
 
+
+class ProjectListForTablesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = (
+            'id', 'projectTitle', 'estimatedImplementationDate', "createdBy", "createdByName")
+
 # class ProjectSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Project

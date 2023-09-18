@@ -23,9 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("users.urls"), name="users"),
     path("projects/", include("projects.urls"), name="projects"),
+    path("messages/", include("custom_messages.urls"), name="messages"),
 ]
 
-
-if settings.DEBUG:    # static'i ve settings'i yukarida import ettik.
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:  # static'i ve settings'i yukarida import ettik.
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT)
