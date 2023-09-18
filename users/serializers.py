@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from projects.serializers import ProjectSerializer
 from .models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -44,9 +45,24 @@ class CustomLoginSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_superuser = serializers.ReadOnlyField()
+    id = serializers.ReadOnlyField()
+    email = serializers.ReadOnlyField()
+    followed_projects = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ('id', "email", 'name', 'job', 'location', 'about', 'phone', 'website', "is_superuser")
+        fields = (
+            'id', "email", 'name', 'job', 'location', 'about', 'phone', 'website', "is_superuser", "followed_projects")
+
+    def get_followed_projects(self, obj):
+        user = User.objects.filter(id=obj.id).first()
+        followed_projects_query = user.followed_projects.all()
+        followed_projects = []
+        for project in followed_projects_query:
+            followed_projects.append(project.id)
+
+        return followed_projects
 
 
 class UserListForAdminSerializer(serializers.ModelSerializer):
