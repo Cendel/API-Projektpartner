@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # my apps
     "projects",
     "custom_messages",
+    "share_ownership",
 
 ]
 

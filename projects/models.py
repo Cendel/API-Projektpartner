@@ -29,7 +29,7 @@ class Project(models.Model):
 
     def save(self, *args, **kwargs):
         if self.createdBy:
-            self.createdByName = self.createdBy.name  # Kullanıcı adını al
+            self.createdByName = self.createdBy.name
         super().save(*args, **kwargs)
 
     #     self.participantCount = self.participantList.count()
