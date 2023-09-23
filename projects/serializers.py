@@ -6,9 +6,10 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
-            'id', 'projectStatus', 'projectTitle', 'projectPlace', 'estimatedImplementationDate', 'slogan', "about",
+            'id', 'projectStatus', "adminAdvice", 'projectTitle', 'projectPlace', 'estimatedImplementationDate',
+            'slogan', "about",
             "goal", "support", "shortDesc", "longDesc", "projectImage", "createdBy", "createdByName", "createdDate",
-            "projectValue", "totalShares", "shareValue", "maxSharesPerPerson", "sharesTaken", "adminAdvice",
+            "projectValue", "totalShares", "shareValue", "maxSharesPerPerson", "sharesTaken",
             "followerList")
 
 
@@ -23,6 +24,18 @@ class ProjectListForTablesSerializer(serializers.ModelSerializer):
         model = Project
         fields = (
             'id', 'projectTitle', 'estimatedImplementationDate', "createdBy", "createdByName")
+
+
+class ProjectStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ["projectStatus"]
+
+
+class ProjectAdminAdviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ["adminAdvice"]
 
 # class ProjectSerializer(serializers.ModelSerializer):
 #     class Meta:

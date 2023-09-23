@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import User
+from share_ownership.models import ShareOwnership
+from projects.models import Project
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
@@ -48,11 +50,14 @@ class UserSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     email = serializers.ReadOnlyField()
     followed_projects = serializers.SerializerMethodField()
+    participated_projects = serializers.SerializerMethodField()
+    created_projects = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = (
-            'id', "email", 'name', 'job', 'location', 'about', 'phone', 'website', "is_superuser", "followed_projects")
+            'id', "email", 'name', 'job', 'location', 'about', 'phone', 'website', "is_superuser", "followed_projects",
+            "participated_projects", "created_projects")
 
     def get_followed_projects(self, obj):
         user = User.objects.filter(id=obj.id).first()
@@ -62,6 +67,24 @@ class UserSerializer(serializers.ModelSerializer):
             followed_projects.append(project.id)
 
         return followed_projects
+
+    def get_participated_projects(self, obj):
+        user = User.objects.filter(id=obj.id).first()
+        participated_projects_query = ShareOwnership.objects.filter(user_id=user.id)
+        participated_projects = []
+        for project in participated_projects_query:
+            participated_projects.append(project.project.id)
+
+        return participated_projects
+
+    def get_created_projects(self, obj):
+        user = User.objects.filter(id=obj.id).first()
+        created_projects_query = Project.objects.filter(createdBy=user.id)
+        created_projects = []
+        for project in created_projects_query:
+            created_projects.append(project.id)
+
+        return created_projects
 
 
 class UserListForAdminSerializer(serializers.ModelSerializer):
