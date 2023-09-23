@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "projects",
     "custom_messages",
     "share_ownership",
+    "project_attachments",
 
 ]
 

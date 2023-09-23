@@ -25,6 +25,7 @@ urlpatterns = [
     path("projects/", include("projects.urls"), name="projects"),
     path("messages/", include("custom_messages.urls"), name="messages"),
     path("share_ownership/", include("share_ownership.urls"), name="share_ownership"),
+    path("project_attachments/", include("project_attachments.urls"), name="project_attachments"),
 ]
 
 if settings.DEBUG:  # static'i ve settings'i yukarida import ettik.

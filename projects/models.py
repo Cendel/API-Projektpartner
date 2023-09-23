@@ -38,7 +38,3 @@ class Project(models.Model):
         storage, path = self.projectImage.storage, self.projectImage.path
         super().delete(*args, **kwargs)
         storage.delete(path)
-
-# class Attachment(models.Model):
-#     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='attachments')
-#     file = models.FileField(upload_to='project_attachments/', null=True, blank=True)
