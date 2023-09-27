@@ -1,9 +1,9 @@
 from django.urls import path
-
-# from .views import ProjectCreateAPIView
+from .views import AttachmentCreateAPIView, AttachmentsByProjectIdListAPIView, AttachmentDestroyAPIView
 
 urlpatterns = [
-    # Diğer URL şablonları burada
-    # path('create/', ProjectCreateAPIView.as_view(), name='project_create'),
+    path('create/', AttachmentCreateAPIView.as_view(), name='attachment_create'),
+    path('listbyproject/', AttachmentsByProjectIdListAPIView.as_view(), name='attachment_by_project'),
+    path('delete/<int:pk>/', AttachmentDestroyAPIView.as_view(), name='attachment_by_project'),
 
 ]

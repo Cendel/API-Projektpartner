@@ -1,5 +1,7 @@
 from django.db import models
 from users.models import User
+import shutil
+import os
 
 
 class Project(models.Model):
@@ -35,6 +37,10 @@ class Project(models.Model):
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
+        media_path = os.path.join('media', 'project_attachments_files', self.projectTitle)
+        if os.path.exists(media_path):
+            shutil.rmtree(media_path)
+
         storage, path = self.projectImage.storage, self.projectImage.path
         super().delete(*args, **kwargs)
         storage.delete(path)

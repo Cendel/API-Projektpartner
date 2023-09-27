@@ -3,6 +3,8 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView,
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
+
+from core.permissions import IsProjectOwner
 from .models import Project
 from .serializers import ProjectSerializer, ProjectFollowerUpdateSerializer, ProjectListForTablesSerializer, \
     ProjectStatusSerializer, ProjectAdminAdviceSerializer
@@ -48,8 +50,7 @@ class ProjectsListByAdminAdviceView(ListAPIView):
 # list requested projects with all details
 class ProjectListByIds(ListAPIView):
     serializer_class = ProjectSerializer
-
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         project_ids = list(self.request.query_params.values())
@@ -75,7 +76,7 @@ class ProjectDetailView(RetrieveAPIView):
 
 # returns/updates/deletes a project - accessible to admins and project owners
 class ProjectDetailAuthView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsProjectOwner]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 

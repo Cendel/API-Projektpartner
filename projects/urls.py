@@ -4,7 +4,6 @@ from .views import ProjectCreateAPIView, ProjectDetailView, ProjectsListByStatus
     UpdateAdminAdviceAPIView, ProjectListByIds
 
 urlpatterns = [
-    # Diğer URL şablonları burada
     path('create/', ProjectCreateAPIView.as_view(), name='project_create'),
     path('list/status/', ProjectsListByStatusView.as_view(), name='list_by_status'),
     path('list/advice/', ProjectsListByAdminAdviceView.as_view(), name='list_by_advice'),
