@@ -22,9 +22,9 @@ class Project(models.Model):
     createdDate = models.DateTimeField(auto_now_add=True)
     followerList = models.ManyToManyField(User, related_name='followed_projects', blank=True)
     participantCount = models.PositiveIntegerField(default=0)
-    projectValue = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=False)
+    projectValue = models.DecimalField(max_digits=20, decimal_places=2, default=0, blank=False)
     totalShares = models.PositiveIntegerField(default=0, blank=False)
-    shareValue = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=False)
+    shareValue = models.DecimalField(max_digits=20, decimal_places=2, default=0, blank=False)
     maxSharesPerPerson = models.PositiveIntegerField(default=0, blank=False)
     sharesTaken = models.PositiveIntegerField(default=0)
 

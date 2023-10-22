@@ -3,12 +3,16 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView,
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
-
-from core.permissions import IsProjectOwner
 from .models import Project
 from .serializers import ProjectSerializer, ProjectFollowerUpdateSerializer, ProjectListForTablesSerializer, \
     ProjectStatusSerializer, ProjectAdminAdviceSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import BasePermission
+
+
+class IsProjectOwner(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.user.id == int(request.data["createdBy"]) or request.user.is_superuser
 
 
 # create a project
@@ -76,9 +80,9 @@ class ProjectDetailView(RetrieveAPIView):
 
 # returns/updates/deletes a project - accessible to admins and project owners
 class ProjectDetailAuthView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsProjectOwner]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = [IsProjectOwner]
 
 
 # follows/unfollows a project

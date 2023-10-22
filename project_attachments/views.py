@@ -1,4 +1,5 @@
-from core.permissions import IsProjectOwner
+from rest_framework.response import Response
+
 from .serializers import AttachmentSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView
 from .models import Attachment
@@ -8,7 +9,17 @@ from rest_framework.permissions import IsAuthenticated
 
 class AttachmentCreateAPIView(CreateAPIView):
     serializer_class = AttachmentSerializer
-    permission_classes = IsProjectOwner
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        project_id = request.data.get('project')  # Bu kısmı projenin ID'sini gönderdiğiniz şekilde ayarlayın
+
+        print(Project.objects.get(id=project_id).createdBy_id)
+        print(user.id)
+
+        if Project.objects.get(id=project_id).createdBy_id == user.id or user.is_superuser:
+            return super().create(request, *args, **kwargs)
 
 
 class AttachmentsByProjectIdListAPIView(ListAPIView):
@@ -24,4 +35,11 @@ class AttachmentsByProjectIdListAPIView(ListAPIView):
 class AttachmentDestroyAPIView(DestroyAPIView):
     queryset = Attachment
     serializer_class = AttachmentSerializer
-    permission_classes = IsProjectOwner
+    permission_classes = [IsAuthenticated]
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if request.user.is_authenticated and (
+                request.user.is_superuser or request.user.id == instance.project.createdBy_id):
+            self.perform_destroy(instance)

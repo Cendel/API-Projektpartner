@@ -36,12 +36,3 @@ class ProjectAdminAdviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ["adminAdvice"]
-
-# class ProjectSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Project
-#         fields = (
-#             'id', 'projectStatus', 'projectTitle', 'projectPlace', 'slogan', "about",
-#             "goal", "support", "shortDesc", "longDesc", "createdBy", "createdByName", "createdDate",
-#             "projectValue",
-#             "totalShares", "shareValue", "maxSharesPerPerson", "sharesTaken", "adminAdvice")
