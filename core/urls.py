@@ -19,13 +19,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("__debug__/", include("debug_toolbar.urls")),
     path("", include("users.urls"), name="users"),
     path("projects/", include("projects.urls"), name="projects"),
     path("messages/", include("custom_messages.urls"), name="messages"),
     path("share_ownership/", include("share_ownership.urls"), name="share_ownership"),
-    path("project_attachments/", include("project_attachments.urls"), name="project_attachments"),
+    path("project_attachments/", include("project_attachments.urls"),
+         name="project_attachments"),
 ]
 
 if settings.DEBUG:  # static'i ve settings'i yukarida import ettik.

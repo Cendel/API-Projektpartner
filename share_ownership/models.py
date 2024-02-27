@@ -53,3 +53,4 @@ class ShareOwnership(models.Model):
 #     instance.project.participantCount -= 1
 #     instance.project.sharesTaken -= instance.shares
 #     instance.project.save()
+
