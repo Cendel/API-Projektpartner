@@ -12,7 +12,7 @@ from rest_framework.permissions import BasePermission
 
 class IsProjectOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.user.id == int(request.data["createdBy"]) or request.user.is_superuser
+        return obj.createdBy_id == request.user.id or request.user.is_superuser
 
 
 # create a project
@@ -35,7 +35,8 @@ class ProjectsListByStatusView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        status_param = True if self.request.query_params.get('projectStatus') == "true" else False
+        status_param = True if self.request.query_params.get(
+            'projectStatus') == "true" else False
         queryset = Project.objects.filter(projectStatus=status_param)
         return queryset
 
@@ -46,7 +47,8 @@ class ProjectsListByAdminAdviceView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        status_param = True if self.request.query_params.get('adminAdvice') == "true" else False
+        status_param = True if self.request.query_params.get(
+            'adminAdvice') == "true" else False
         queryset = Project.objects.filter(adminAdvice=status_param)
         return queryset
 
@@ -112,7 +114,8 @@ class UpdateProjectStatusAPIView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
@@ -130,7 +133,8 @@ class UpdateAdminAdviceAPIView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
