@@ -9,7 +9,7 @@ __pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media
+media/
 .idea/
 Notes.txt
 
@@ -141,6 +141,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+env3/
 
 # Spyder project settings
 .spyderproject

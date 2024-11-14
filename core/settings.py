@@ -27,13 +27,12 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=Csv())
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='', cast=Csv())
 
-# Application definition
-
 INSTALLED_APPS = [
+    # Django Built-in Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,27 +40,27 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 3rd party libraries
-    'django_use_email_as_username.apps.DjangoUseEmailAsUsernameConfig',
-    'corsheaders',
-    "users",
-    'rest_framework',
-    "django_extensions",
-    "debug_toolbar",
-    'drf_yasg',
-
     # my apps
+    "users",
     "projects",
     "custom_messages",
     "share_ownership",
     "project_attachments",
 
+    # 3rd party libraries
+    'django_use_email_as_username.apps.DjangoUseEmailAsUsernameConfig',
+    'corsheaders',
+    'rest_framework',
 ]
+
+if config('DEBUG', default='False') == 'True':
+    INSTALLED_APPS.append('django_extensions')
+    INSTALLED_APPS.append('debug_toolbar')
+    INSTALLED_APPS.append('drf_yasg')
 
 AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
@@ -71,6 +70,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 INTERNAL_IPS = [
     # ...

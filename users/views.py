@@ -49,7 +49,6 @@ class RetrieveUpdateUserView(RetrieveUpdateAPIView):
 
     def get_queryset(self):
         self.kwargs['pk'] = self.request.user.id
-        print(self.request.user.id)
         queryset = User.objects.all()
         return queryset
 

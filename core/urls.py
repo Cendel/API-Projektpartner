@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from decouple import config
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -37,24 +38,26 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('swagger/<str:format>/',
-         schema_view.without_ui(cache_timeout=0), name='schema-json'),
-
-    path('swagger/', schema_view.with_ui('swagger',
-         cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc',
-         cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
-    path("__debug__/", include("debug_toolbar.urls")),
-    path("", include("users.urls"), name="users"),
-    path("projects/", include("projects.urls"), name="projects"),
-    path("messages/", include("custom_messages.urls"), name="messages"),
-    path("share_ownership/", include("share_ownership.urls"), name="share_ownership"),
-    path("project_attachments/", include("project_attachments.urls"),
+    path("api/", include("users.urls"), name="users"),
+    path("api/projects/", include("projects.urls"), name="projects"),
+    path("api/messages/", include("custom_messages.urls"), name="messages"),
+    path("api/share_ownership/", include("share_ownership.urls"),
+         name="share_ownership"),
+    path("api/project_attachments/", include("project_attachments.urls"),
          name="project_attachments"),
 ]
 
-if settings.DEBUG:  # static'i ve settings'i yukarida import ettik.
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT)
+if config('DEBUG', default='False') == 'True':
+    urlpatterns += [
+        path("__debug__/", include("debug_toolbar.urls")),
+        path('swagger/<str:format>/',
+             schema_view.without_ui(cache_timeout=0), name='schema-json'),
+        path('swagger/', schema_view.with_ui('swagger',
+             cache_timeout=0), name='schema-swagger-ui'),
+        path('redoc/', schema_view.with_ui('redoc',
+             cache_timeout=0), name='schema-redoc'),
+    ]
+
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

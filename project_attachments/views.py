@@ -13,10 +13,7 @@ class AttachmentCreateAPIView(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         user = request.user
-        project_id = request.data.get('project')  # Bu kısmı projenin ID'sini gönderdiğiniz şekilde ayarlayın
-
-        print(Project.objects.get(id=project_id).createdBy_id)
-        print(user.id)
+        project_id = request.data.get('project')
 
         if Project.objects.get(id=project_id).createdBy_id == user.id or user.is_superuser:
             return super().create(request, *args, **kwargs)
