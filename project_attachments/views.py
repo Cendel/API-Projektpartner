@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-
+from rest_framework import status
 from .serializers import AttachmentSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView
 from .models import Attachment
@@ -40,3 +40,6 @@ class AttachmentDestroyAPIView(DestroyAPIView):
         if request.user.is_authenticated and (
                 request.user.is_superuser or request.user.id == instance.project.createdBy_id):
             self.perform_destroy(instance)
+            return Response({"message": "Attachment deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+        return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
